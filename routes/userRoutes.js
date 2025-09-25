@@ -1,11 +1,14 @@
-import React from 'react'
+const express = require("express");
+const router = express.Router();
 
-const userRoutes = () => {
-  return (
-    <div>
-      
-    </div>
-  )
-}
+const {loginUser, signupUser}= require("../controllers/userController")
 
-export default userRoutes
+
+//login user**********************
+router.post("/login", loginUser);
+
+//Signup User**************************
+
+router.post("/signup", signupUser);
+
+module.exports =router;
