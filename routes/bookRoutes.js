@@ -1,7 +1,5 @@
 const express = require("express");
-
-const Book = require("../models/bookModel");
-
+const authUser = require("../middleware/authMiddleware");
 const router = express.Router();
 
 // Require Controllers
@@ -14,12 +12,12 @@ router.get("/", getBooks)
 router.get("/:id", getBook)
 
 // Create Record
-router.post("/", createBook)
+router.post("/", authUser, createBook)
 
 // Update Record
-router.put("/:id", editBook)
+router.put("/:id",authUser, editBook)
 
 // Delete Record
-router.delete("/:id", deleteBook)
+router.delete("/:id",authUser, deleteBook)
 
 module.exports = router;
