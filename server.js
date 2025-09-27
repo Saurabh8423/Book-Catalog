@@ -5,8 +5,13 @@ const cors = require("cors");
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const connectDB = require("./config/db");
+const bookRoutes = require("./routes/bookRoutes");
+const userRoutes = require("./routes/userRoutes");
 const app = express();
 const errorHandler = require('./middleware/errorMiddleware');
+
+// Connect DB
+connectDB();
 
 //MiddleWare
 app.use(helmet());
@@ -14,8 +19,6 @@ app.use(express.json())
 app.use(cors());
 app.use(morgan('dev'));
 
-// Connect DB
-connectDB();
 
 // rate limiter (simple)
 const limiter = rateLimit({
@@ -26,10 +29,7 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-// ✅ Routes
-const bookRoutes = require("./routes/bookRoutes");
-const userRoutes = require("./routes/userRoutes");
-
+//  Routes
 app.use("/api/books", bookRoutes);
 app.use("/api/users", userRoutes);
 
@@ -37,9 +37,9 @@ app.use("/api/users", userRoutes);
 //PORT
 const port = process.env.PORT || 5000
 
-// app.get("/", (req, res)=> {
-//     res.send("hello!")
-// })
+app.get("/", (req, res) => {
+  res.json({ success: true, message: "API is running..." });
+});
 
 // error handling (last)
 app.use(errorHandler);
