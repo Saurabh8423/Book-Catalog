@@ -12,12 +12,12 @@ router.get("/", getBooks)
 router.get("/:id", getBook)
 
 // Create Record
-router.post("/", authUser, createBook)
+router.post("/",  createBook)
 
 // Update Record
-router.put("/:id",authUser, editBook)
+router.put("/:id", editBook)
 
 // Delete Record
-router.delete("/:id",authUser, deleteBook)
+router.delete("/:id", deleteBook)
 
 module.exports = router;

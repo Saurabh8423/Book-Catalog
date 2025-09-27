@@ -15,7 +15,10 @@ const getBooks = async (req, res) => {
 const getBook = async (req, res) => {
   try {
     const id = req.params.id
-    const bookData = await Book.find({ _id: id });
+    const bookData = await Book.findById(id);
+     if (!bookData) {
+      return res.status(404).json({ error: "Book not found" });
+    }
     res.status(200).json(bookData);
   } catch (err) {
     res.status(400).json({ error: err.message });
