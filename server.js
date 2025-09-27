@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/db");
 const app = express();
+const errorHandler = require('./middleware/errorMiddleware');
 
 //MiddleWare
 app.use(express.json())
@@ -26,6 +27,8 @@ const port = process.env.PORT || 5000
 //     res.send("hello!")
 // })
 
+// error handling (last)
+app.use(errorHandler);
 
 app.listen(port, ()=>{
     console.log(`Server is running at PORT: ${port}`);

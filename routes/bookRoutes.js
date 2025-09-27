@@ -1,23 +1,51 @@
 const express = require("express");
-const authUser = require("../middleware/authMiddleware");
+const { body, param } = require('express-validator');
+const auth = require('../middleware/authMiddleware');
+const validateRequest = require('../middleware/validateMiddleware');
+const bookController = require('../controllers/bookController');
 const router = express.Router();
 
-// Require Controllers
-const { getBooks, getBook, createBook , editBook, deleteBook} = require("../controllers/bookController");
+
+
+//****************Public Routes**************************
 
 //Get entire Records
-router.get("/", getBooks)
+router.get("/", bookController.getBooks)
 
 //Get single Records
-router.get("/:id", getBook)
+router.get("/:id", 
+     [param('id').isMongoId().withMessage('Invalid book id')],
+  validateRequest,
+  bookController.getBook
+);
+
+//*************Protected Routes *****************
 
 // Create Record
-router.post("/",  createBook)
+router.post("/",  auth,
+  validateRequest,
+  bookController.createBook
+);
 
 // Update Record
-router.put("/:id", editBook)
+router.put("/:id", auth,
+  [
+    param('id').isMongoId().withMessage('Invalid book id'),
+    body('title').optional().trim(),
+    body('author').optional().trim(),
+    body('genre').optional().trim(),
+    body('price').optional().isFloat({ gt: 0 }).withMessage('Price must be a positive number'),
+    body('inStock').optional().isBoolean().withMessage('inStock must be boolean')
+  ],
+  validateRequest,
+  bookController.editBook
+);
 
 // Delete Record
-router.delete("/:id", deleteBook)
+router.delete("/:id", auth,
+  [param('id').isMongoId().withMessage('Invalid book id')],
+  validateRequest,
+  bookController.deleteBook
+);
 
 module.exports = router;
