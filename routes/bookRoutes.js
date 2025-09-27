@@ -23,6 +23,13 @@ router.get("/:id",
 
 // Create Record
 router.post("/",  auth,
+  [
+    body('title').trim().notEmpty().withMessage('Title is required'),
+    body('author').trim().notEmpty().withMessage('Author is required'),
+    body('genre').trim().notEmpty().withMessage('Genre is required'),
+    body('price').isFloat({ gt: 0 }).withMessage('Price must be a positive number'),
+    body('inStock').optional().isBoolean().withMessage('inStock must be boolean')
+  ],
   validateRequest,
   bookController.createBook
 );
